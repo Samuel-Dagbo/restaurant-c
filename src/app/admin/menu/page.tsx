@@ -176,7 +176,7 @@ export default function AdminMenuPage() {
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-3 mb-1">
                       <h3 className="text-sm font-medium text-cream truncate">{item.name}</h3>
-                      <span className="text-primary font-bold shrink-0 text-sm">${item.price.toFixed(2)}</span>
+                      <span className="text-primary font-bold shrink-0 text-sm">GH₵{item.price.toFixed(2)}</span>
                     </div>
                     <p className="text-xs text-cream/40 mb-1">{item.category?.name}</p>
                     <p className="text-xs text-cream/40 line-clamp-2 leading-relaxed">{item.description}</p>

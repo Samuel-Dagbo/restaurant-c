@@ -125,7 +125,7 @@ export default function AdminOrdersPage() {
                       <p className="text-xs text-cream/30">{new Date(order.createdAt).toLocaleString()}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="text-xl font-bold text-primary">${order.total.toFixed(2)}</div>
+                      <div className="text-xl font-bold text-primary">GH₵{order.total.toFixed(2)}</div>
                       <PaymentSelect value={order.paymentStatus} onChange={(v) => updatePayment(order._id, v)} options={paymentStatuses} />
                     </div>
                   </div>
@@ -138,7 +138,7 @@ export default function AdminOrdersPage() {
                           {item.name}
                           {item.note && <span className="text-cream/30 ml-2">({item.note})</span>}
                         </span>
-                        <span className="text-cream">${(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="text-cream">GH₵{(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>

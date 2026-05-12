@@ -64,10 +64,10 @@ export default function MenuCard({ item, index = 0 }: MenuCardProps) {
             {item.name}
           </h3>
           <div className="text-right shrink-0">
-            <span className="text-lg font-bold text-primary">${item.price.toFixed(2)}</span>
+            <span className="text-lg font-bold text-primary">GH₵{item.price.toFixed(2)}</span>
             {item.originalPrice && item.originalPrice > item.price && (
               <span className="block text-xs text-cream/40 line-through">
-                ${item.originalPrice.toFixed(2)}
+                GH₵{item.originalPrice.toFixed(2)}
               </span>
             )}
           </div>

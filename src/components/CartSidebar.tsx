@@ -119,7 +119,7 @@ export default function CartSidebar() {
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-medium text-cream truncate">{item.name}</h4>
                         <p className="text-primary text-sm font-medium mt-1">
-                          ${item.price.toFixed(2)}
+                          GH₵{item.price.toFixed(2)}
                         </p>
                         <div className="flex items-center gap-3 mt-2">
                           <button
@@ -153,15 +153,15 @@ export default function CartSidebar() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between text-cream/60">
                       <span>Subtotal</span>
-                      <span>${subtotal.toFixed(2)}</span>
+                      <span>GH₵{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-cream/60">
                       <span>Tax (8%)</span>
-                      <span>${tax.toFixed(2)}</span>
+                      <span>GH₵{tax.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-lg font-semibold text-cream pt-2 border-t border-primary/10">
                       <span>Total</span>
-                      <span className="text-primary">${total.toFixed(2)}</span>
+                      <span className="text-primary">GH₵{total.toFixed(2)}</span>
                     </div>
                   </div>
                   <button

@@ -114,7 +114,7 @@ export default function DashboardPage() {
                           {new Date(order.createdAt).toLocaleDateString()}
                         </p>
                       </div>
-                      <span className="text-lg font-bold text-primary">${order.total.toFixed(2)}</span>
+                      <span className="text-lg font-bold text-primary">GH₵{order.total.toFixed(2)}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -158,7 +158,7 @@ export default function DashboardPage() {
                       </p>
                     </div>
                     <div className="text-right shrink-0 ml-4">
-                      <span className="text-sm font-bold text-primary block">${order.total.toFixed(2)}</span>
+                      <span className="text-sm font-bold text-primary block">GH₵{order.total.toFixed(2)}</span>
                       <StatusBadge status={order.status} />
                     </div>
                   </div>

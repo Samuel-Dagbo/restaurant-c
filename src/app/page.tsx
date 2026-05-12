@@ -17,9 +17,9 @@ const features = [
 ];
 
 const popularDishes = [
-  { name: "Wagyu Beef Tartare", price: "$42", tag: "Signature", image: "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80" },
-  { name: "Lobster Thermidor", price: "$68", tag: "Premium", image: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=600&q=80" },
-  { name: "Truffle Risotto", price: "$36", tag: "Chef's Special", image: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=600&q=80" },
+  { name: "Wagyu Beef Tartare", price: "GH₵42", tag: "Signature", image: "https://images.unsplash.com/photo-1553621042-f6e147245754?w=600&q=80" },
+  { name: "Lobster Thermidor", price: "GH₵68", tag: "Premium", image: "https://images.unsplash.com/photo-1625943553852-781c6dd46faa?w=600&q=80" },
+  { name: "Truffle Risotto", price: "GH₵36", tag: "Chef's Special", image: "https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=600&q=80" },
 ];
 
 const testimonials = [

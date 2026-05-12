@@ -106,7 +106,7 @@ export default function OrdersPage() {
                           {item.name}
                           {item.note && <span className="text-cream/30 ml-2">({item.note})</span>}
                         </span>
-                        <span className="text-cream font-medium">${(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="text-cream font-medium">GH₵{(item.price * item.quantity).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
@@ -117,7 +117,7 @@ export default function OrdersPage() {
 
                   <div className="flex items-center justify-between pt-4 border-t border-primary/10">
                     <span className="text-xs text-cream/40 capitalize">{order.paymentMethod}</span>
-                    <span className="text-lg font-bold text-primary">${order.total.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-primary">GH₵{order.total.toFixed(2)}</span>
                   </div>
                 </motion.div>
               ))}
