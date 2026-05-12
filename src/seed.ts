@@ -360,7 +360,7 @@ async function seed() {
     const adminPassword = await bcrypt.hash("admin123", 12);
     const userPassword = await bcrypt.hash("user123", 12);
 
-    const admin = await User.create({
+    await User.create({
       name: "Admin",
       email: "admin@savory.com",
       password: adminPassword,

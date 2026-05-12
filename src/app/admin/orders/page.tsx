@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import AdminGuard from "@/components/AdminGuard";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 
@@ -77,14 +78,14 @@ export default function AdminOrdersPage() {
 
   return (
     <AdminGuard>
-      <div className="bg-dark-bg min-h-screen pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <DashboardSidebar>
+        <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-cream">Order Management</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-cream">Order Management</h1>
               <p className="text-cream/50 text-sm mt-1">{orders.length} total orders</p>
             </div>
-            <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
               {["all", ...statuses].map((s) => (
                 <button key={s}
                   onClick={() => setFilterStatus(s)}
@@ -94,7 +95,7 @@ export default function AdminOrdersPage() {
                       : "bg-dark-card border border-primary/20 text-cream/50 hover:border-primary/40"
                   }`}
                 >
-                  {s}
+                  {s} {s === "all" ? `(${orders.length})` : `(${orders.filter((o) => o.status === s).length})`}
                 </button>
               ))}
             </div>
@@ -109,32 +110,21 @@ export default function AdminOrdersPage() {
               <p className="text-cream/40">No orders found</p>
             </div>
           ) : (
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="space-y-4"
-            >
+            <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-4">
               {filteredOrders.map((order) => (
-                <motion.div
-                  key={order._id}
-                  variants={fadeUp}
-                  className="p-6 rounded-2xl bg-dark-card border border-primary/10"
-                >
+                <motion.div key={order._id} variants={fadeUp} className="p-5 sm:p-6 rounded-2xl bg-dark-card border border-primary/10">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 pb-4 border-b border-primary/10">
                     <div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium text-cream">
-                          Order #{order._id.slice(-8).toUpperCase()}
-                        </span>
+                      <div className="flex items-center flex-wrap gap-2">
+                        <span className="text-sm font-medium text-cream">#{order._id.slice(-8).toUpperCase()}</span>
                         <StatusSelect value={order.status} onChange={(v) => updateStatus(order._id, v)} options={statuses} />
                       </div>
                       <p className="text-xs text-cream/40 mt-1">
-                        {order.user?.name || "Unknown"} — {order.user?.email}
+                        {order.user?.name || "Unknown"} &lt;{order.user?.email}&gt;
                       </p>
                       <p className="text-xs text-cream/30">{new Date(order.createdAt).toLocaleString()}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <div className="text-xl font-bold text-primary">${order.total.toFixed(2)}</div>
                       <PaymentSelect value={order.paymentStatus} onChange={(v) => updatePayment(order._id, v)} options={paymentStatuses} />
                     </div>
@@ -163,7 +153,7 @@ export default function AdminOrdersPage() {
             </motion.div>
           )}
         </div>
-      </div>
+      </DashboardSidebar>
     </AdminGuard>
   );
 }
@@ -178,14 +168,10 @@ function StatusSelect({ value, onChange, options }: { value: string; onChange: (
     cancelled: "border-red-500/30 text-red-400",
   };
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`text-xs px-2.5 py-1 rounded-full border bg-transparent outline-none cursor-pointer ${colors[value] || "border-primary/20 text-cream/60"}`}
+    <select value={value} onChange={(e) => onChange(e.target.value)}
+      className={`text-xs px-2.5 py-1 rounded-full border bg-dark-bg outline-none cursor-pointer ${colors[value] || "border-primary/20 text-cream/60"}`}
     >
-      {options.map((opt) => (
-        <option key={opt} value={opt} className="bg-dark-bg">{opt}</option>
-      ))}
+      {options.map((opt) => (<option key={opt} value={opt}>{opt}</option>))}
     </select>
   );
 }
@@ -197,14 +183,10 @@ function PaymentSelect({ value, onChange, options }: { value: string; onChange: 
     refunded: "text-red-400/60",
   };
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={`text-xs mt-1 bg-transparent outline-none cursor-pointer ${colors[value] || "text-cream/40"}`}
+    <select value={value} onChange={(e) => onChange(e.target.value)}
+      className={`text-xs mt-1 bg-dark-bg outline-none cursor-pointer ${colors[value] || "text-cream/40"}`}
     >
-      {options.map((opt) => (
-        <option key={opt} value={opt} className="bg-dark-bg">{opt}</option>
-      ))}
+      {options.map((opt) => (<option key={opt} value={opt}>{opt}</option>))}
     </select>
   );
 }

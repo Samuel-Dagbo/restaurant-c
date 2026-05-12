@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import AdminGuard from "@/components/AdminGuard";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import { motion, AnimatePresence } from "framer-motion";
-import { HiPlus, HiPencil, HiTrash, HiX } from "react-icons/hi";
+import { HiPlus, HiPencil, HiTrash, HiX, HiPhotograph } from "react-icons/hi";
 import toast from "react-hot-toast";
 
 interface MenuItem {
@@ -36,9 +37,7 @@ export default function AdminMenuPage() {
   const [showCatForm, setShowCatForm] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
   async function fetchData() {
     try {
@@ -107,14 +106,14 @@ export default function AdminMenuPage() {
 
   return (
     <AdminGuard>
-      <div className="bg-dark-bg min-h-screen pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center justify-between mb-8">
+      <DashboardSidebar>
+        <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-cream">Menu Management</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-cream">Menu Management</h1>
               <p className="text-cream/50 text-sm mt-1">{items.length} items across {categories.length} categories</p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               <button onClick={() => setShowCatForm(true)}
                 className="px-4 py-2.5 rounded-full border border-primary/20 text-cream/60 hover:border-primary/40 transition-all text-sm"
               >
@@ -140,32 +139,51 @@ export default function AdminMenuPage() {
                   layout
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="p-5 rounded-2xl bg-dark-card border border-primary/10"
+                  className="rounded-2xl bg-dark-card border border-primary/10 overflow-hidden"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-cream font-medium truncate">{item.name}</h3>
-                      <p className="text-xs text-cream/40 mt-0.5">{item.category?.name}</p>
-                    </div>
-                    <span className="text-primary font-bold shrink-0 ml-4">${item.price.toFixed(2)}</span>
-                  </div>
-                  <p className="text-xs text-cream/40 line-clamp-2 mb-3">{item.description}</p>
-                  <div className="flex items-center gap-2">
-                    {item.featured && <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary">Featured</span>}
-                    {!item.isAvailable && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">Unavailable</span>}
-                    <div className="ml-auto flex gap-1">
+                  {/* Image */}
+                  <div className="relative h-40 bg-dark-bg overflow-hidden">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <HiPhotograph className="w-10 h-10 text-cream/10" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-transparent to-transparent" />
+                    <div className="absolute top-3 right-3 flex gap-1">
                       <button onClick={() => { setForm({
                         name: item.name, description: item.description,
                         price: item.price.toString(), category: typeof item.category === 'object' ? item.category._id : item.category,
                         image: item.image || "", featured: item.featured, isAvailable: item.isAvailable,
                       }); setEditing(item); setShowForm(true); }}
-                        className="p-1.5 rounded-lg border border-primary/20 text-cream/40 hover:text-primary hover:border-primary transition-all">
-                        <HiPencil className="w-4 h-4" />
+                        className="p-1.5 rounded-lg bg-dark-bg/80 border border-primary/20 text-cream/60 hover:text-primary hover:border-primary transition-all backdrop-blur-sm">
+                        <HiPencil className="w-3.5 h-3.5" />
                       </button>
                       <button onClick={() => handleDelete(item._id)}
-                        className="p-1.5 rounded-lg border border-red-500/20 text-red-400/60 hover:text-red-400 hover:border-red-400 transition-all">
-                        <HiTrash className="w-4 h-4" />
+                        className="p-1.5 rounded-lg bg-dark-bg/80 border border-red-500/20 text-red-400/60 hover:text-red-400 hover:border-red-400 transition-all backdrop-blur-sm">
+                        <HiTrash className="w-3.5 h-3.5" />
                       </button>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-4">
+                    <div className="flex items-start justify-between gap-3 mb-1">
+                      <h3 className="text-sm font-medium text-cream truncate">{item.name}</h3>
+                      <span className="text-primary font-bold shrink-0 text-sm">${item.price.toFixed(2)}</span>
+                    </div>
+                    <p className="text-xs text-cream/40 mb-1">{item.category?.name}</p>
+                    <p className="text-xs text-cream/40 line-clamp-2 leading-relaxed">{item.description}</p>
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-primary/10">
+                      {item.featured && <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary">Featured</span>}
+                      {!item.isAvailable && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400">Unavailable</span>}
+                      {item.image && <span className="text-[10px] text-cream/30 ml-auto">Has image</span>}
                     </div>
                   </div>
                 </motion.div>
@@ -176,7 +194,7 @@ export default function AdminMenuPage() {
           <AnimatePresence>
             {showForm && (
               <>
-                <div className="fixed inset-0 bg-black/60 z-50" onClick={() => setShowForm(false)} />
+                <div className="fixed inset-0 bg-black/60 z-50" onClick={() => { setShowForm(false); resetForm(); }} />
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -226,21 +244,28 @@ export default function AdminMenuPage() {
                         </div>
                         <div className="col-span-2">
                           <label className="block text-xs text-cream/60 mb-1">Image URL</label>
+                          {form.image && (
+                            <div className="mb-2 rounded-xl overflow-hidden h-32 bg-dark-card">
+                              <img src={form.image} alt="Preview" className="w-full h-full object-cover"
+                                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                              />
+                            </div>
+                          )}
                           <input type="url" value={form.image}
                             onChange={(e) => setForm({ ...form, image: e.target.value })}
-                            className="w-full px-3 py-2.5 rounded-xl bg-dark-card border border-primary/20 text-cream text-sm focus:border-primary outline-none transition-all"
-                            placeholder="https://res.cloudinary.com/..."
+                            className="w-full px-3 py-2.5 rounded-xl bg-dark-card border border-primary/20 text-cream text-sm placeholder-cream/20 focus:border-primary outline-none transition-all"
+                            placeholder="https://images.unsplash.com/..."
                           />
                         </div>
                         <div className="flex items-center gap-6">
-                          <label className="flex items-center gap-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" checked={form.featured}
                               onChange={(e) => setForm({ ...form, featured: e.target.checked })}
                               className="rounded border-primary/30 text-primary focus:ring-primary"
                             />
                             <span className="text-xs text-cream/60">Featured</span>
                           </label>
-                          <label className="flex items-center gap-2">
+                          <label className="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" checked={form.isAvailable}
                               onChange={(e) => setForm({ ...form, isAvailable: e.target.checked })}
                               className="rounded border-primary/30 text-primary focus:ring-primary"
@@ -303,7 +328,7 @@ export default function AdminMenuPage() {
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </DashboardSidebar>
     </AdminGuard>
   );
 }

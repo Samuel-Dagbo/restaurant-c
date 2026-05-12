@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import AuthGuard from "@/components/AuthGuard";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import { motion } from "framer-motion";
-import { HiArrowLeft } from "react-icons/hi";
+import { HiClipboardList } from "react-icons/hi";
+import Link from "next/link";
 
 interface OrderItem {
-  menuItem: string;
   name: string;
   quantity: number;
   price: number;
@@ -59,19 +59,11 @@ export default function OrdersPage() {
 
   return (
     <AuthGuard>
-      <div className="bg-dark-bg min-h-screen pt-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex items-center gap-4 mb-8">
-            <Link
-              href="/dashboard"
-              className="p-2 rounded-lg border border-primary/20 text-cream/50 hover:text-primary hover:border-primary transition-all"
-            >
-              <HiArrowLeft className="w-5 h-5" />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-cream">My Orders</h1>
-              <p className="text-cream/50 text-sm">View all your order history</p>
-            </div>
+      <DashboardSidebar>
+        <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-xl sm:text-2xl font-bold text-cream">My Orders</h1>
+            <p className="text-cream/50 text-sm mt-1">View all your past and current orders</p>
           </div>
 
           {loading ? (
@@ -80,37 +72,27 @@ export default function OrdersPage() {
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-20 bg-dark-card rounded-2xl border border-primary/10">
+              <HiClipboardList className="w-16 h-16 text-cream/10 mx-auto mb-4" />
               <p className="text-cream/40 text-lg">No orders yet</p>
               <Link
                 href="/menu"
-                className="inline-block mt-4 px-6 py-2.5 rounded-full bg-primary text-dark-bg text-sm font-medium hover:bg-primary-light transition-all"
+                className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full bg-primary text-dark-bg text-sm font-medium hover:bg-primary-light transition-all"
               >
                 Browse Menu
               </Link>
             </div>
           ) : (
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              animate="visible"
-              className="space-y-4"
-            >
+            <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-4">
               {orders.map((order) => (
-                <motion.div
-                  key={order._id}
-                  variants={fadeUp}
-                  className="p-6 rounded-2xl bg-dark-card border border-primary/10"
-                >
-                  <div className="flex items-center justify-between mb-4 pb-4 border-b border-primary/10">
+                <motion.div key={order._id} variants={fadeUp} className="p-6 rounded-2xl bg-dark-card border border-primary/10">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-4 border-b border-primary/10">
                     <div>
                       <span className="text-xs text-cream/40 uppercase tracking-wider">
                         Order #{order._id.slice(-8).toUpperCase()}
                       </span>
-                      <p className="text-xs text-cream/30 mt-1">
-                        {new Date(order.createdAt).toLocaleString()}
-                      </p>
+                      <p className="text-xs text-cream/30 mt-1">{new Date(order.createdAt).toLocaleString()}</p>
                     </div>
-                    <div className="text-right">
+                    <div className="flex items-center gap-2">
                       <StatusBadge status={order.status} />
                       <PaymentBadge status={order.paymentStatus} />
                     </div>
@@ -130,25 +112,19 @@ export default function OrdersPage() {
                   </div>
 
                   {order.specialInstructions && (
-                    <p className="text-xs text-cream/30 italic mb-4">
-                      Note: {order.specialInstructions}
-                    </p>
+                    <p className="text-xs text-cream/30 italic mb-4">Note: {order.specialInstructions}</p>
                   )}
 
                   <div className="flex items-center justify-between pt-4 border-t border-primary/10">
-                    <span className="text-xs text-cream/40">
-                      Paid via {order.paymentMethod}
-                    </span>
-                    <div className="text-right">
-                      <span className="text-lg font-bold text-primary">${order.total.toFixed(2)}</span>
-                    </div>
+                    <span className="text-xs text-cream/40 capitalize">{order.paymentMethod}</span>
+                    <span className="text-lg font-bold text-primary">${order.total.toFixed(2)}</span>
                   </div>
                 </motion.div>
               ))}
             </motion.div>
           )}
         </div>
-      </div>
+      </DashboardSidebar>
     </AuthGuard>
   );
 }
@@ -163,7 +139,7 @@ function StatusBadge({ status }: { status: string }) {
     cancelled: "bg-red-500/20 text-red-400",
   };
   return (
-    <span className={`inline-block text-xs px-2.5 py-1 rounded-full uppercase tracking-wider ${colors[status] || "bg-cream/10 text-cream/40"}`}>
+    <span className={`text-xs px-2.5 py-1 rounded-full uppercase tracking-wider ${colors[status] || "bg-cream/10 text-cream/40"}`}>
       {status}
     </span>
   );
@@ -176,8 +152,6 @@ function PaymentBadge({ status }: { status: string }) {
     refunded: "bg-red-500/10 text-red-400/60",
   };
   return (
-    <span className={`inline-block text-xs px-2.5 py-1 rounded-full mt-1 ${colors[status] || "bg-cream/10 text-cream/40"}`}>
-      {status}
-    </span>
+    <span className={`text-xs px-2.5 py-1 rounded-full ${colors[status] || "bg-cream/10 text-cream/40"}`}>{status}</span>
   );
 }
